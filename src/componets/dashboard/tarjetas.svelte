@@ -1,6 +1,5 @@
 <script>
     import {urlStore } from '../../stores/index.js';
-    console.log("esto es desde las tarjetas ", $urlStore)
     export let option;
 </script>
 <div class={option.class} on:click={urlStore.update}>

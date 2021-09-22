@@ -7,6 +7,7 @@ export function createMenu() {
     return {
         subscribe,
         update,
+        set,
         goMenu: ()=> update(n=> !n)
     };
 }
