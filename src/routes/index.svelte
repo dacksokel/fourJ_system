@@ -1,5 +1,5 @@
 <script>
-	import { user } from '../stores/index.js';
+	import { userStore } from '../stores/index.js';
 
 	import Login from '../componets/login/index.svelte';
 </script>

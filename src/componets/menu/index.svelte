@@ -1,23 +1,31 @@
 <script>
-	import { user } from '../../stores/index.js';
+	import { userStore, menuStore, urlStore } from '../../stores/index.js';
+	
+	let goM = ()=> {
+		menuStore.goMenu()
+		urlStore.update()
+		console.log("esto es desde menu ", $urlStore)
+	}
 	
 </script>
+
 <div id="contenedor">
 	<!-- <aside>
 		<h1>#1 Burger Menu</h1>
 		<h4>inspired by</h4>
 		<h3>Google Material Design</h3>
 	</aside> -->
-	<input type="checkbox" id="menu-toggle" />
+	<input type="checkbox" on:click={goM} id="menu-toggle" />
 	<label id="trigger" for="menu-toggle" />
 	<label id="burger" for="menu-toggle" />
 	<ul id="menu">
-		<li><a href="#">Home</a></li>
+		{#if $urlStore != 'dashboard'}
+			<li><a href="/dashboard" on:click={goM}>Home</a></li>
+		{/if}
 		<li><a href="#">Perfil de Usuario</a></li>
-		<li><a href="#" on:click|preventDefault={user.salir}>Salir</a></li>
+		<li><a href="#" on:click|preventDefault={userStore.salir}>Salir</a></li>
 	</ul>
 </div>
-
 
 <style>
 	@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
@@ -62,13 +70,13 @@
 		background-color: #eee;
 		transition: all 0.5s;
 	}
-	aside {
+	/* aside {
 		position: absolute;
 		color: white;
 		top: 35%;
 		right: 10%;
 		text-align: right;
-	}
+	} */
 	h1 {
 		line-height: 0;
 		font-size: 4vw;
@@ -88,6 +96,7 @@
 	}
 
 	#contenedor {
+		/* z-index: -1; */
 		position: absolute;
 		top: 0;
 		left: 0;

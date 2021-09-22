@@ -1,11 +1,15 @@
 import { get } from 'svelte/store';
 import { createUser } from './userStores'
+import { createMenu } from './menuStore'
+import { createUrl } from './urlStore'
 
-export const user = createUser();
+export const userStore = createUser();
+export const menuStore = createMenu();
+export const urlStore = createUrl();
 
-let url = window.location.pathname.split("/")[1];
-
-let userL = get(user)
+let url = get(urlStore)
+// console.log(url);
+let userL = get(userStore)
 
 if (userL != null) {
     
