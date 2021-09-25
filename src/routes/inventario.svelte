@@ -5,39 +5,43 @@
 	import Slots from '../componets/slots/index.svelte';
 	import Loading from '../componets/loading/index.svelte';
 	// import Producto from '../componets/inventario/index.svelte';
-	let items = [];
+	let items = [],
+		departamentos = [];
 	async function start() {
 		let userL = get(userStore);
-		let items = await fetch(`http://localhost:1000/producto/${userL.user.rif}`);
-		items = await items.json();
-		// console.log("🚀 ~ file: inventario.svelte ~ line 12 ~ start ~ items", items)
+		let depa = await fetch(`http://localhost:1000/departamentos`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		depa = await depa.json();
+		departamentos = depa.departamentos;
+		if (departamentos.length > 0) {
+			let items = await fetch(
+				`http://localhost:1000/producto/${userL.user.rif}/${departamentos[0]._id}`
+			);
+			items = await items.json();
 
-		if (items.productos.length > 0) {
-			// console.log(items.productos);
-			return items.productos;
-			// itemsStore.start(items.productos);
+			if (items.productos.length > 0) {
+				return items.productos;
+			} else {
+				throw new Error(items);
+			}
 		}
 	}
-	items = start();
-	// $: if ($itemsStore) {
-	// 	console.log($itemsStore.length);
-	// 	if ($itemsStore.length > 0) {
-	// 		console.log('the component has mounted');
-	// 		console.log('🚀 ~ file: inventario.svelte ~ line 10 ~ itemsStore', $itemsStore);
-	// 		items = $itemsStore;
-	// 	}
-	// }
 	let s = () => {
 		let estilo = ['d-card blue ', 'd-card green', 'd-card red'];
 		let n = parseInt(Math.random() * 3);
 
 		return estilo[n];
 	};
+	items = start();
 </script>
 
 <Slots>
 	{#await items}
-		<Loading></Loading>
+		<Loading />
 	{:then items2}
 		<div class="main-view">
 			<!-- <Producto></Producto> -->
@@ -63,9 +67,8 @@
 						</p>
 					</div>
 					<div class="card-actions">
-						<i class="fa fa-eye" />
-						<i class="fa fa-edit" />
-						<i class="fa fa-trash" />
+						<button> Guardar </button>
+						<button> Modificar </button>
 					</div>
 				</div>
 			{/each}
