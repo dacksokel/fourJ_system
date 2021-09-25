@@ -1,49 +1,28 @@
 <script>
-	// import { empresaStore } from '../stores/index.js';
-    // console.log("🚀 ~ file: inventario.svelte ~ line 3 ~ userStore", $empresaStore)
-	import Slots from '../componets/slots/index.svelte';
-
-	// import Producto from '../componets/inventario/index.svelte';
-	let s = ()=>{
-		let estilo =[
-			"d-card blue ",
-			"d-card green",
-			"d-card red"
-		];
-		let n = parseInt(Math.random()*3)
-
-		return estilo[n]
-	}
-	
-	
+    export let producto;
 </script>
 
-<Slots>
-	<div class="main-view">
-		<!-- <Producto></Producto> -->
-		<!-- lo usare asi de momento por lo rapido pero esto debe irse a un componente -->
-		<div class={s()}>
-			<div class="card-header">
-				<div class="icon">
-					<i class="fa fa-tint" />
-				</div>
-				<p>Water Card</p>
-			</div>
-			<div class="card-body">
-				<p>
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-					dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
-					nascetur ridiculus mus
-				</p>
-			</div>
-			<div class="card-actions">
-				<i class="fa fa-eye" />
-				<i class="fa fa-edit" />
-				<i class="fa fa-trash" />
-			</div>
+<div class=" d-card blue">
+	<div class="card-header">
+		<div class="icon">
+			<i class="fa fa-tint" />
 		</div>
+		<p>Water Card</p>
 	</div>
-</Slots>
+	<div class="card-body">
+		<p>
+			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+			Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
+			mus
+		</p>
+	</div>
+	<div class="card-actions">
+		<i class="fa fa-eye" />
+		<i class="fa fa-edit" />
+		<i class="fa fa-trash" />
+	</div>
+</div>
+
 
 <style>
 	@font-face {

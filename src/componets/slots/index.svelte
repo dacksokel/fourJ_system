@@ -4,7 +4,7 @@
 	import Menu from '../menu/index.svelte';
 </script>
 
-<Menu />
+<Menu></Menu>
 {#if !$menuStore}
 	<div id="contenedor">
 		<div class="container">
@@ -12,6 +12,7 @@
 		</div>
 	</div>
 {/if}
+
 
 <style>
 	#contenedor {
