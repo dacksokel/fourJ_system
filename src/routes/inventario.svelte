@@ -7,7 +7,9 @@
 	// import Producto from '../componets/inventario/index.svelte';
 	let items = [],
 		departamentos = [],
-		departamento = '';
+		departamento = '',
+		itemNC = '';
+	//itemNC = item nombre codigo
 
 	async function start(departamento) {
 		let userL = get(userStore);
@@ -50,6 +52,16 @@
 		return estilo[n];
 	};
 
+	async function g1(its, itemNC) {
+		let d;
+		if (itemNC) {
+			d = its.filter((item) => item.nombre.includes(itemNC));
+		} else {
+			d = its;
+		}
+
+		console.log('🚀 ~ file: inventario.svelte ~ line 64 ~ g1 ~ d', d);
+	}
 	// $: updateItems();
 	$: if (departamento == '') {
 		console.log('vacio');
@@ -57,6 +69,35 @@
 	} else {
 		console.log(departamento);
 		items = start(departamento);
+	}
+
+	// $: if (itemNC != ""){
+	// 	console.log(itemNC)
+	// 	items2 = items.filter( item =>{
+	// 		itemNC = itemNC.toLowerCase()
+	// 		item.nombre = item.nombre.toLowerCase()
+
+	// 		if(item.nombre.includes(itemNC)) {
+	// 			return true
+	// 		}else{
+	// 			return false
+	// 		}
+	// 	})
+	// 	console.log(items2)
+	// }
+	// $: console.log(g1(items, itemNC))
+	async function guardar(i) {
+		console.log('guardando datos ', i);
+		let res = await fetch(`http://localhost:1000/producto`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(i)
+		});
+
+		let datos = await res.json();
+		console.log(datos);
 	}
 </script>
 
@@ -70,9 +111,9 @@
 					<option value={depa._id}>{depa.nombre}</option>
 				{/each}
 			</select>
-			<p>
-				Buscar por nombre: <input type="text" >
-			</p>
+			<!-- <p>
+				Buscar por nombre: <input type="text" bind:value={itemNC} />
+			</p> -->
 		</div>
 		<div class="main-view">
 			<!-- <Producto></Producto> -->
@@ -98,8 +139,8 @@
 						</p>
 					</div>
 					<div class="card-actions">
-						<button> Guardar </button>
-						<button> Modificar </button>
+						<button on:click={guardar(item)}> Guardar </button>
+						<!-- <button> Modificar </button> -->
 					</div>
 				</div>
 			{/each}
