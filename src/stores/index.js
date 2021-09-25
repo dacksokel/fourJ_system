@@ -3,11 +3,13 @@ import { createUser } from './userStores'
 import { createMenu } from './menuStore'
 import { createUrl } from './urlStore'
 import { createEmpresa } from './empStores'
+import { createItems } from './itemsStore'
 
 export const userStore = createUser();
 export const menuStore = createMenu();
 export const urlStore = createUrl();
 export const empresaStore = createEmpresa();
+export const itemsStore = createItems();
 
 let init = async () => {
     
@@ -37,12 +39,13 @@ let init = async () => {
     
             sessionStorage.setItem("login_session", JSON.stringify(datos_session));
     
-            console.log("🚀 ~ file: empStores.js ~ line 4 ~ createEmpresa ~ usuario", userL)
             let empresa = await fetch(`http://localhost:1000/perfil/${userL.user.rif}`)
             empresa = await empresa.json();
             if (empresa.status) {
-                console.log("🚀 ~ file: empStores.js ~ line 5 ~ createEmpresa ~ empresa", empresa)
-    
+                empresaStore.start(empresa)
+                // let items = await fetch(`http://localhost:1000/producto/${userL.user.rif}`)
+                // items = await items.json()
+                // itemsStore.start(items.productos)
             }
         }
     } else {

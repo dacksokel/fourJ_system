@@ -1,48 +1,78 @@
 <script>
-	// import { empresaStore } from '../stores/index.js';
-    // console.log("🚀 ~ file: inventario.svelte ~ line 3 ~ userStore", $empresaStore)
+	import { get } from 'svelte/store';
+	import { onMount, afterUpdate } from 'svelte';
+	import { userStore, empresaStore, itemsStore } from '../stores/index.js';
 	import Slots from '../componets/slots/index.svelte';
-
+	import Loading from '../componets/loading/index.svelte';
 	// import Producto from '../componets/inventario/index.svelte';
-	let s = ()=>{
-		let estilo =[
-			"d-card blue ",
-			"d-card green",
-			"d-card red"
-		];
-		let n = parseInt(Math.random()*3)
+	let items = [];
+	async function start() {
+		let userL = get(userStore);
+		let items = await fetch(`http://localhost:1000/producto/${userL.user.rif}`);
+		items = await items.json();
+		// console.log("🚀 ~ file: inventario.svelte ~ line 12 ~ start ~ items", items)
 
-		return estilo[n]
+		if (items.productos.length > 0) {
+			// console.log(items.productos);
+			return items.productos;
+			// itemsStore.start(items.productos);
+		}
 	}
-	
-	
+	items = start();
+	// $: if ($itemsStore) {
+	// 	console.log($itemsStore.length);
+	// 	if ($itemsStore.length > 0) {
+	// 		console.log('the component has mounted');
+	// 		console.log('🚀 ~ file: inventario.svelte ~ line 10 ~ itemsStore', $itemsStore);
+	// 		items = $itemsStore;
+	// 	}
+	// }
+	let s = () => {
+		let estilo = ['d-card blue ', 'd-card green', 'd-card red'];
+		let n = parseInt(Math.random() * 3);
+
+		return estilo[n];
+	};
 </script>
 
 <Slots>
-	<div class="main-view">
-		<!-- <Producto></Producto> -->
-		<!-- lo usare asi de momento por lo rapido pero esto debe irse a un componente -->
-		<div class={s()}>
-			<div class="card-header">
-				<div class="icon">
-					<i class="fa fa-tint" />
+	{#await items}
+		<Loading></Loading>
+	{:then items2}
+		<div class="main-view">
+			<!-- <Producto></Producto> -->
+			<!-- lo usare asi de momento por lo rapido pero esto debe irse a un componente -->
+			{#each items2 as item}
+				<div class={s()}>
+					<div class="card-header">
+						<div class="icon">
+							<i class="fa fa-tint" />
+						</div>
+						<span>{item.codigo}</span>
+						<p>{item.nombre}</p>
+					</div>
+					<div class="card-body">
+						<p>
+							{item.descripcion}
+						</p>
+						<p>
+							Almacen: <input type="number" bind:value={item.almacen} />
+						</p>
+						<p>
+							Cantidad: <input type="number" bind:value={item.cantidad} />
+						</p>
+					</div>
+					<div class="card-actions">
+						<i class="fa fa-eye" />
+						<i class="fa fa-edit" />
+						<i class="fa fa-trash" />
+					</div>
 				</div>
-				<p>Water Card</p>
-			</div>
-			<div class="card-body">
-				<p>
-					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-					dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
-					nascetur ridiculus mus
-				</p>
-			</div>
-			<div class="card-actions">
-				<i class="fa fa-eye" />
-				<i class="fa fa-edit" />
-				<i class="fa fa-trash" />
-			</div>
+			{/each}
 		</div>
-	</div>
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
 </Slots>
 
 <style>
@@ -132,6 +162,12 @@
 	}
 	.main-view .d-card .card-body p {
 		color: white;
+	}
+	.main-view .d-card .card-body p input {
+		width: 30%;
+		border: none;
+		border-bottom: solid thin;
+		background: none;
 	}
 	.main-view .d-card .card-actions {
 		border-top: 1px solid white;
