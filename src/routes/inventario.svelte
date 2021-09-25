@@ -6,21 +6,34 @@
 	import Loading from '../componets/loading/index.svelte';
 	// import Producto from '../componets/inventario/index.svelte';
 	let items = [],
-		departamentos = [];
-	async function start() {
+		departamentos = [],
+		departamento = '';
+
+	async function start(departamento) {
 		let userL = get(userStore);
-		let depa = await fetch(`http://localhost:1000/departamentos`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
+		if (departamento == '') {
+			let depa = await fetch(`http://localhost:1000/departamentos`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			depa = await depa.json();
+			departamentos = depa.departamentos;
+			if (departamentos.length > 0) {
+				let items = await fetch(
+					`http://localhost:1000/producto/${userL.user.rif}/${departamentos[0]._id}`
+				);
+				items = await items.json();
+
+				if (items.productos.length > 0) {
+					return items.productos;
+				} else {
+					throw new Error(items);
+				}
 			}
-		});
-		depa = await depa.json();
-		departamentos = depa.departamentos;
-		if (departamentos.length > 0) {
-			let items = await fetch(
-				`http://localhost:1000/producto/${userL.user.rif}/${departamentos[0]._id}`
-			);
+		} else {
+			let items = await fetch(`http://localhost:1000/producto/${userL.user.rif}/${departamento}`);
 			items = await items.json();
 
 			if (items.productos.length > 0) {
@@ -36,13 +49,31 @@
 
 		return estilo[n];
 	};
-	items = start();
+
+	// $: updateItems();
+	$: if (departamento == '') {
+		console.log('vacio');
+		items = start(departamento);
+	} else {
+		console.log(departamento);
+		items = start(departamento);
+	}
 </script>
 
 <Slots>
 	{#await items}
 		<Loading />
 	{:then items2}
+		<div>
+			Buscar por departamentos: <select bind:value={departamento}>
+				{#each departamentos as depa}
+					<option value={depa._id}>{depa.nombre}</option>
+				{/each}
+			</select>
+			<p>
+				Buscar por nombre: <input type="text" >
+			</p>
+		</div>
 		<div class="main-view">
 			<!-- <Producto></Producto> -->
 			<!-- lo usare asi de momento por lo rapido pero esto debe irse a un componente -->
