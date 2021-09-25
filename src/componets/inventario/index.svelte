@@ -1,5 +1,5 @@
 <script>
-    export let producto;
+	export let producto;
 </script>
 
 <div class=" d-card blue">
@@ -22,7 +22,6 @@
 		<i class="fa fa-trash" />
 	</div>
 </div>
-
 
 <style>
 	@font-face {

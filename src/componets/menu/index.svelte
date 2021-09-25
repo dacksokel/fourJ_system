@@ -1,12 +1,11 @@
 <script>
 	import { userStore, menuStore, urlStore } from '../../stores/index.js';
-	
-	let goM = ()=> {
-		menuStore.goMenu()
-		urlStore.update()
-		console.log("esto es desde menu ", $urlStore)
-	}
-	
+
+	let goM = () => {
+		menuStore.goMenu();
+		urlStore.update();
+		console.log('esto es desde menu ', $urlStore);
+	};
 </script>
 
 <div id="contenedor">

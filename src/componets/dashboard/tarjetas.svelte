@@ -1,10 +1,14 @@
 <script>
-    import {urlStore } from '../../stores/index.js';
-    export let option;
+	import { urlStore } from '../../stores/index.js';
+	export let option;
 </script>
+
 <div class={option.class} on:click={urlStore.update}>
-	<a href={option.url}><span><img id="img" src = {option.icon} alt={option.titulo}/> </span>{option.titulo}</a>
+	<a href={option.url}
+		><span><img id="img" src={option.icon} alt={option.titulo} /> </span>{option.titulo}</a
+	>
 </div>
+
 <!-- <div class="panel post">
 				<a href="javascript:void();"><span>8 </span>Posts</a>
 			</div>
@@ -18,7 +22,7 @@
 				<a href="javascript:void();"><span>4 </span>Users</a>
 			</div> -->
 <style>
-    .panel {
+	.panel {
 		box-sizing: border-box;
 		position: relative;
 		display: inline-block;
@@ -110,7 +114,7 @@
 	.panel:hover:after {
 		transition: all 0.5s;
 	}
-    #img{
-        width: 35%;
-    }
+	#img {
+		width: 35%;
+	}
 </style>

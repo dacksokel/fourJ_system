@@ -1,13 +1,12 @@
 import { writable } from 'svelte/store';
 
 export function createEmpresa() {
-    
-    const { subscribe, set, update } = writable({});
+	const { subscribe, set, update } = writable({});
 
-    return {
-        subscribe,
-        update,
-        // set,
-        start: (empresa) => set(empresa)
-    };
+	return {
+		subscribe,
+		update,
+		// set,
+		start: (empresa) => set(empresa)
+	};
 }

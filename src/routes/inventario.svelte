@@ -1,7 +1,7 @@
 <script>
 	import { get } from 'svelte/store';
 	import { onMount, afterUpdate } from 'svelte';
-	import { userStore, empresaStore, itemsStore } from '../stores/index.js';
+	import { userStore, empresaStore, itemsStore, urlBserver } from '../stores/index.js';
 	import Slots from '../componets/slots/index.svelte';
 	import Loading from '../componets/loading/index.svelte';
 	// import Producto from '../componets/inventario/index.svelte';
@@ -14,7 +14,7 @@
 	async function start(departamento) {
 		let userL = get(userStore);
 		if (departamento == '') {
-			let depa = await fetch(`http://localhost:1000/departamentos`, {
+			let depa = await fetch(`${$urlBserver}/departamentos`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -24,7 +24,7 @@
 			departamentos = depa.departamentos;
 			if (departamentos.length > 0) {
 				let items = await fetch(
-					`http://localhost:1000/producto/${userL.user.rif}/${departamentos[0]._id}`
+					`${$urlBserver}/producto/${userL.user.rif}/${departamentos[0]._id}`
 				);
 				items = await items.json();
 
@@ -35,7 +35,7 @@
 				}
 			}
 		} else {
-			let items = await fetch(`http://localhost:1000/producto/${userL.user.rif}/${departamento}`);
+			let items = await fetch(`${$urlBserver}/producto/${userL.user.rif}/${departamento}`);
 			items = await items.json();
 
 			if (items.productos.length > 0) {
@@ -88,7 +88,7 @@
 	// $: console.log(g1(items, itemNC))
 	async function guardar(i) {
 		console.log('guardando datos ', i);
-		let res = await fetch(`http://localhost:1000/producto`, {
+		let res = await fetch(`${$urlBserver}/producto`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -98,6 +98,12 @@
 
 		let datos = await res.json();
 		console.log(datos);
+		if(datos.status){
+			alert("producto actualizado exitosamente")
+		}
+	}
+	function upup(){
+		window.scrollBy(0, -window.innerHeight*100);
 	}
 </script>
 
@@ -115,6 +121,7 @@
 				Buscar por nombre: <input type="text" bind:value={itemNC} />
 			</p> -->
 		</div>
+		<div id="subir" on:click={upup}>subir</div>
 		<div class="main-view">
 			<!-- <Producto></Producto> -->
 			<!-- lo usare asi de momento por lo rapido pero esto debe irse a un componente -->
@@ -157,7 +164,14 @@
 		font-weight: 400;
 		src: url(https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjx4wWw.ttf) format('truetype');
 	}
-
+	#subir{
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		cursor: pointer;
+		background-color: #f9532a;
+		padding: 0.5em;
+	}
 	.main-view {
 		display: flex;
 		flex-wrap: wrap;

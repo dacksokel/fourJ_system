@@ -1,19 +1,18 @@
 <script>
-    import Login from './login.svelte';
-    import NameS from '../nameSystem/index.svelte'
+	import Login from './login.svelte';
+	import NameS from '../nameSystem/index.svelte';
 </script>
 
 <div id="contenedor">
-    <NameS></NameS>
-	<Login></Login>
+	<NameS />
+	<Login />
 </div>
 
 <style>
-    
 	#contenedor {
-        position: absolute;
-        top:0;
-        left:0;
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
 		font-family: 'Open Sans', sans-serif;
@@ -60,5 +59,4 @@
 			linear-gradient(135deg, #670d10 0%, #092756 100%);
 		/* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 ); */
 	}
-	
 </style>

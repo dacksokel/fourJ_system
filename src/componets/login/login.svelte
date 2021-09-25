@@ -1,14 +1,13 @@
 <script>
-    import Mensaje from '../mensajes/index.svelte'
+	import Mensaje from '../mensajes/index.svelte';
+	import {urlBserver } from '../../stores/index.js';
 
 	let login = {
 		user: '',
 		password: ''
 	};
-    let alerta = {};
-
+	let alerta = {};
 	const enter = async (event) => {
-
 		if (sessionStorage.getItem('seccion')) {
 			sessionStorage.removeItem('seccion');
 		}
@@ -16,47 +15,46 @@
 		if (login.user != '' && login.password != '') {
 			login.user = login.user.toLowerCase();
 			try {
-				
-				let res = await fetch(`http://localhost:1000/user/login`, {
+				let res = await fetch(`${$urlBserver}/user/login`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify(login)
 				});
-	
+
 				let data = await res.json();
 				console.log(data);
 				console.log(login);
 				if (data.status) {
 					alerta = {
-						visible:true,
-						text:`Bienvenido ${data.user.user}, ${data.user.titulo}`,
-						good:true
-					}
+						visible: true,
+						text: `Bienvenido ${data.user.user}, ${data.user.titulo}`,
+						good: true
+					};
 					let datos_session = {
 						login: true,
 						session_time: Date.now(),
 						user: data.user
 					};
-					console.log(datos_session);				
+					console.log(datos_session);
 					sessionStorage.setItem('login_session', JSON.stringify(datos_session));
 					// window.location.reload();
-					location.href = '/dashboard'
+					location.href = '/dashboard';
 				} else {
 					alerta = {
-						visible:true,
-						text:' usuario o password invalidos!!',                    
-					}
-					
+						visible: true,
+						text: ' usuario o password invalidos!!'
+					};
+
 					// document.querySelector('.animationload').style.display = 'none'; //con esto detenemos el loading
 				}
 			} catch (error) {
 				alerta = {
-						visible:true,
-						text:`ERROR AL CONECTARSE CON EL SERVIDOR, VERIFIQUE SU CONEXION`,
-						good:false
-					}
+					visible: true,
+					text: `ERROR AL CONECTARSE CON EL SERVIDOR, VERIFIQUE SU CONEXION`,
+					good: false
+				};
 			}
 		}
 	};
@@ -64,7 +62,7 @@
 
 <div class="login">
 	<h1>Login</h1>
-    <Mensaje {... alerta}></Mensaje>
+	<Mensaje {...alerta} />
 	<form method="post">
 		<input
 			type="text"
@@ -80,7 +78,10 @@
 			placeholder="Password"
 			required="required"
 		/>
-		<button type="submit" on:click|preventDefault={enter} class="btn btn-primary btn-block btn-large">Enter</button
+		<button
+			type="submit"
+			on:click|preventDefault={enter}
+			class="btn btn-primary btn-block btn-large">Enter</button
 		>
 	</form>
 </div>
